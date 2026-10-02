@@ -5,10 +5,10 @@ import { IBuyer } from "../types"
 import { IBuyerErrors } from "../types"
 
 export class Buyer {
-  payment: TPayment = '';
-  email: string = '';
-  phone: string = '';
-  address: string = '';
+  private payment: TPayment | null = null;
+  private email: string = '';
+  private phone: string = '';
+  private address: string = '';
 
   setAddress(address: string): void {
     this.address = address;
@@ -35,16 +35,16 @@ export class Buyer {
     }
   }
   
-  cleanBuyerData(): void {
-    this.payment = '';
+  clearBuyerData(): void {
+    this.payment = null;
     this.email = '';
     this.phone = '';
     this.address = '';
   }
 
-  validationBuyerData(): IBuyerErrors {
+  validateBuyerData(): IBuyerErrors {
     const errors: IBuyerErrors = {};
-    if (this.payment === '') {
+    if (this.payment === null) {
       errors.payment = 'Не выбран способ оплаты';
     }
     if (this.email === '') {

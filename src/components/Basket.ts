@@ -1,9 +1,9 @@
 import { IProduct } from "../types"
 
 export class Basket {
-  purchasedProduct: IProduct[] = [];
+  private purchasedProduct: IProduct[] = [];
   
-  getProductBasket(): IProduct[] {
+  getBasketProducts(): IProduct[] {
     return this.purchasedProduct;
   }
 
@@ -11,42 +11,23 @@ export class Basket {
     this.purchasedProduct.push(product);
   }
 
-  deleteProduct(product: IProduct): void {
-    const index = this.purchasedProduct.findIndex(
-      (item) => item.id === product.id
-    );
-    if (index >= 0) {
-      this.purchasedProduct.splice(index, 1);
-    }
+  removeProductById(product: string): void {
+    this. purchasedProduct = this. purchasedProduct.filter((item) => item.id !== product);
   }
 
-  cleaningBasket(): void {
-    this.purchasedProduct.splice(0, this.purchasedProduct.length);
+  clearBasket(): void {
+    this.purchasedProduct = [];
   }
 
-  priceAllProduct(): number {
-    let price: number = 0;
-    for (const item of this.purchasedProduct) {
-      if (item.price === null) {
-        price += 0;
-      }
-      else {
-        price += item.price;
-      }
-    }
-    return price;
+  getTotalPrice(): number {
+    return this. purchasedProduct.reduce((total, item) => total + (item.price || 0), 0);
   }
 
-  quantityProductBasket(): number {
+  getBasketQuantity(): number {
     return this.purchasedProduct.length;
   }
 
-  checkProductInBasket(id: string): boolean {
-    for (const element of this.purchasedProduct) {
-      if (element.id === id) {
-        return true;
-      }
-    }
-    return false;
+  hasProduct(id: string): boolean {
+    return this. purchasedProduct.some(item => item.id === id)
   }
 }

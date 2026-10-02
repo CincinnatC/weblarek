@@ -1,18 +1,18 @@
 import { IProduct } from "../types"
 
 export class ProductCatalog {
-  arrayProducts: IProduct[] = [];
-  selectedProduct: IProduct | null = null;
+  private arrayProducts: IProduct[] = [];
+  private selectedProduct: IProduct | null = null;
   
-  savingArray(products: IProduct[]): void {
+  setProducts(products: IProduct[]): void {
     this.arrayProducts = products;
   }
 
-  getArray(): IProduct[] {
+  getProducts(): IProduct[] {
     return this.arrayProducts;
   }
 
-  oneProduct(id: string): IProduct | null {
+  getProductById(id: string): IProduct | null {
     for (const element of this.arrayProducts) {
       if (element.id === id) {
          return element;
@@ -21,11 +21,11 @@ export class ProductCatalog {
     return null
   }
 
-  preservationProduct(products: IProduct): void  {
+  selectProduct(products: IProduct): void  {
     this.selectedProduct = products;
   }
 
-  getProduct(): IProduct | null{
+  getSelectedProduct(): IProduct | null{
     return this.selectedProduct;
   }
 }
