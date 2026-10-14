@@ -1,7 +1,7 @@
-import { IApi } from "../../types"
-import { IProductsResponse } from "../../types"
-import { IOrder } from "../../types"
-import { IOrderResult } from "../../types"
+import { IApi } from "../types"
+import { IProductsResponse } from "../types"
+import { IOrder } from "../types"
+import { IOrderResult } from "../types"
 
 export class ConnectionAPI {
   constructor(private api: IApi) {

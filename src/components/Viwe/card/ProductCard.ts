@@ -2,7 +2,6 @@ import { Component } from "../../base/Component"
 import { ensureElement } from "../../../utils/utils"
 
 export interface ProductCardData {
-  id: string;
   title: string;
   price: number | null;
 }
@@ -10,7 +9,6 @@ export interface ProductCardData {
 export class ProductCard<T extends ProductCardData> extends Component<T>{
   protected productTitle: HTMLElement;
   protected productPrice: HTMLElement;
-  protected id: string = "";
 
   constructor(container: HTMLElement) {
     super(container)
