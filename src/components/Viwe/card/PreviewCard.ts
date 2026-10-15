@@ -1,11 +1,14 @@
 import { ensureElement } from "../../../utils/utils"
 import { ProductCard, ProductCardData } from "./ProductCard"
-import { CDN_URL } from "../../../utils/constants";
+import { categoryMap, CDN_URL } from "../../../utils/constants";
+
+type CategoryKey = keyof typeof categoryMap;
 
 interface PreviewCardData extends ProductCardData {
   description: string;
   image: string;
   buttonText: string;
+  buttonDisabled: boolean;
 }
 
 interface PreviewCardActions {
@@ -16,8 +19,7 @@ export class PreviewCard extends ProductCard<PreviewCardData> {
   private previewImage: HTMLImageElement;
   private previewButton: HTMLButtonElement;
   private descriptionCard: HTMLParagraphElement;
-  private isInBasket = false;
-  private currentPrice: number | null = null;
+  private cardCategory: HTMLElement;
 
   constructor(actions: PreviewCardActions, container: HTMLElement) {
     super(container)
@@ -27,6 +29,7 @@ export class PreviewCard extends ProductCard<PreviewCardData> {
     this.previewButton = ensureElement<HTMLButtonElement>(".card__button", this.container);
 
     this.previewButton.addEventListener("click", actions.onClick);
+    this.cardCategory = ensureElement<HTMLElement>(".card__category", this.container);
   }
   set description(value: string) {
     this.descriptionCard.textContent = value;
@@ -34,22 +37,20 @@ export class PreviewCard extends ProductCard<PreviewCardData> {
   set image(value: string) {
     this.setImage(this.previewImage, CDN_URL + value);
   }
-  set price(value: number | null) {
-    super.price = value;
-    this.currentPrice = value;
-    this.updateButton();
-  }
   set buttonText(value: string) {
-    this.isInBasket = value === "Удалить из корзины";
-    this.updateButton();
+    this.previewButton.textContent = value;
   }
-  private updateButton(): void {
-    if (this.currentPrice === null) {
-      this.previewButton.disabled = true;
-      this.previewButton.textContent = "Недоступно";
-    } else {
-      this.previewButton.disabled = false;
-      this.previewButton.textContent = this.isInBasket ? "Удалить из корзины" : "Купить";
+  set buttonDisabled(value: boolean) {
+    this.previewButton.disabled = value;
+  }
+  set category(value: string) {
+    this.cardCategory.textContent = value;
+    
+    for (const key in categoryMap) {
+      this.cardCategory.classList.toggle(
+        categoryMap[key as CategoryKey],
+        key === value
+      );
     }
   }
 }

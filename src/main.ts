@@ -72,7 +72,12 @@ events.on("product:selected", () => {
   if (product === null) {
      return;
   }
-  const content = previewCard.render({...product, buttonText: basketModel.hasProduct(product.id) ? "Удалить из корзины" : "Купить"});
+  const inBasket = basketModel.hasProduct(product.id);
+  const content = previewCard.render({
+    ...product,
+    buttonText: product.price === null ? "Недоступно" : inBasket === true ? "Удалить из корзины" : "Купить",
+    buttonDisabled: product.price === null
+  });
   modal.content = content;
   modal.open();
 })
@@ -106,18 +111,7 @@ events.on("basket:changed", () => {
 });
 
 events.on("basket:open", () => {
-  const products = basketModel.getBasketProducts();
-  const cards: HTMLElement[] = [];
-  for (let i = 0; i < products.length; i++) {
-    const product = products[i];
-    const card = new CardBasket({onClick: () => events.emit("basket:delete", { id: product.id })},cloneTemplate<HTMLElement>("#card-basket"));
-    cards.push(card.render({ ...product, index: i + 1 }));
-  }
-  modal.content = basketView.render({
-    items: cards,
-    price: basketModel.getTotalPrice(),
-    valid: basketModel.getBasketQuantity() > 0
-  });
+  modal.content = basketView.render();
   modal.open();
 });
 
